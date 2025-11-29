@@ -1,0 +1,19 @@
+{
+  "name": "qiyanas-p2p-parser",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Lolzteam P2P Market Exchange Parser with Telegram notifications",
+  "main": "p2p.js",
+  "scripts": {
+    "start": "node p2p.js"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2"
+  },
+  "keywords": ["lolzteam", "p2p", "parser", "telegram"],
+  "license": "MIT"
+}
