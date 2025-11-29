@@ -1,3 +1,5 @@
+![anime-girl-smoking-blunt-y6jbld8q8c00f9wd](https://github.com/user-attachments/assets/543d3995-e519-459d-8b3e-12c9759f5dd2)
+
 # QIYANAS P2P PARSER
 
 Парсер P2P обменов с Lolzteam Market с веб-интерфейсом и уведомлениями в Telegram.
@@ -10,4 +12,5 @@
 - Фильтрация по суммам отдачи и получения
 - Автоматическое обновление каждые 5 минут
 - Уведомления в Telegram
+
 - Адаптивный веб-интерфейс
