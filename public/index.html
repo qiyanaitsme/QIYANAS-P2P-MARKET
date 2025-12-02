@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QIYANAS P2P</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap');
+    
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #0a0a0f;
+      color: #e0e0e0;
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+    
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: 
+        radial-gradient(ellipse at 20% 20%, rgba(139, 69, 139, 0.15) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 80%, rgba(139, 69, 139, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 50% 50%, rgba(75, 0, 75, 0.1) 0%, transparent 70%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    
+    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
+    
+    .header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+    
+    .header h1 {
+      font-family: 'Orbitron', monospace;
+      font-size: 48px;
+      font-weight: 900;
+      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #ff6b9d 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: 8px;
+      text-shadow: 0 0 40px rgba(255, 107, 157, 0.5);
+      margin-bottom: 8px;
+    }
+    
+    .header p {
+      font-family: 'Orbitron', monospace;
+      color: #c44569;
+      font-size: 14px;
+      letter-spacing: 3px;
+      opacity: 0.8;
+    }
+    
+    .glow-dot {
+      width: 8px;
+      height: 8px;
+      background: #ff6b9d;
+      border-radius: 50%;
+      position: absolute;
+      box-shadow: 0 0 20px #ff6b9d, 0 0 40px #ff6b9d;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .dot-1 { top: 50px; right: 50px; }
+    .dot-2 { top: 200px; left: 30px; animation-delay: 0.5s; }
+    .dot-3 { bottom: 300px; right: 80px; animation-delay: 1s; }
+    
+    @keyframes pulse {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+    
+    .panel {
+      background: linear-gradient(135deg, rgba(20, 15, 25, 0.95) 0%, rgba(15, 10, 20, 0.98) 100%);
+      border: 1px solid rgba(196, 69, 105, 0.3);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 20px;
+      position: relative;
+      backdrop-filter: blur(10px);
+    }
+    
+    .panel::before {
+      content: '';
+      position: absolute;
+      top: -1px; left: -1px; right: -1px; bottom: -1px;
+      background: linear-gradient(135deg, rgba(255, 107, 157, 0.2), transparent, rgba(196, 69, 105, 0.2));
+      border-radius: 16px;
+      z-index: -1;
+      opacity: 0.5;
+    }
+    
+    .panel-title {
+      color: #c44569;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 20px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .format-hint {
+      background: rgba(196, 69, 105, 0.1);
+      border: 1px solid rgba(196, 69, 105, 0.3);
+      border-radius: 8px;
+      padding: 10px 16px;
+      font-size: 12px;
+      color: #888;
+      margin-bottom: 24px;
+      font-family: monospace;
+    }
+    
+    .format-hint span { color: #ff6b9d; }
+    
+    .filters-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-bottom: 24px;
+    }
+    
+    .filter-section h3 {
+      color: #666;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 16px;
+    }
+    
+    .filter-group {
+      margin-bottom: 16px;
+    }
+    
+    .filter-group label {
+      display: block;
+      color: #c44569;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+    
+    select, input[type="number"] {
+      width: 100%;
+      background: rgba(20, 15, 25, 0.8);
+      border: 1px solid rgba(196, 69, 105, 0.3);
+      color: #fff;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+      transition: all 0.3s ease;
+    }
+    
+    select:focus, input:focus {
+      outline: none;
+      border-color: #ff6b9d;
+      box-shadow: 0 0 20px rgba(255, 107, 157, 0.2);
+    }
+    
+    select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c44569' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+    
+    input::placeholder { color: #444; }
+    
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 16px;
+    }
+    
+    .btn {
+      padding: 14px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      font-family: 'Inter', sans-serif;
+    }
+    
+    .btn-primary {
+      background: linear-gradient(135deg, #c44569 0%, #ff6b9d 100%);
+      border: none;
+      color: #fff;
+      box-shadow: 0 4px 20px rgba(196, 69, 105, 0.4);
+    }
+    
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 30px rgba(196, 69, 105, 0.6);
+    }
+    
+    .btn-primary:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid rgba(196, 69, 105, 0.5);
+      color: #c44569;
+    }
+    
+    .btn-secondary:hover {
+      background: rgba(196, 69, 105, 0.1);
+      border-color: #ff6b9d;
+    }
+    
+    .btn-auto {
+      background: transparent;
+      border: 1px solid rgba(196, 69, 105, 0.5);
+      color: #c44569;
+    }
+    
+    .btn-auto.active {
+      background: rgba(196, 69, 105, 0.2);
+      border-color: #ff6b9d;
+      color: #ff6b9d;
+    }
+    
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+    
+    .stat-card {
+      background: linear-gradient(135deg, rgba(20, 15, 25, 0.95) 0%, rgba(15, 10, 20, 0.98) 100%);
+      border: 1px solid rgba(196, 69, 105, 0.3);
+      border-radius: 12px;
+      padding: 24px;
+      text-align: center;
+      position: relative;
+    }
+    
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      height: 6px;
+      background: #ff6b9d;
+      border-radius: 50%;
+      top: 12px;
+      right: 12px;
+      box-shadow: 0 0 10px #ff6b9d;
+      animation: pulse 2s ease-in-out infinite;
+    }
+    
+    .stat-card:nth-child(2)::after { animation-delay: 0.3s; }
+    .stat-card:nth-child(3)::after { animation-delay: 0.6s; }
+    
+    .stat-number {
+      font-family: 'Orbitron', monospace;
+      font-size: 42px;
+      font-weight: 700;
+      background: linear-gradient(135deg, #ff6b9d, #c44569);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 8px;
+    }
+    
+    .stat-label {
+      color: #666;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .results-panel { margin-top: 20px; }
+    
+    .results-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(196, 69, 105, 0.2);
+    }
+    
+    .thread {
+      padding: 16px;
+      border: 1px solid rgba(196, 69, 105, 0.2);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      transition: all 0.3s ease;
+      background: rgba(15, 10, 20, 0.5);
+    }
+    
+    .thread:hover {
+      border-color: rgba(255, 107, 157, 0.4);
+      background: rgba(196, 69, 105, 0.05);
+    }
+    
+    .thread-title {
+      font-weight: 500;
+      margin-bottom: 10px;
+      word-break: break-word;
+      line-height: 1.4;
+    }
+    
+    .thread-meta {
+      font-size: 12px;
+      color: #666;
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    
+    .thread-meta a {
+      color: #ff6b9d;
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    
+    .thread-meta a:hover { color: #fff; }
+    
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 10px;
+      font-weight: 700;
+      margin-right: 10px;
+      letter-spacing: 1px;
+    }
+    
+    .tag-deposit { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
+    .tag-withdraw { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
+    .tag-other { background: rgba(107, 114, 128, 0.2); color: #6b7280; border: 1px solid rgba(107, 114, 128, 0.3); }
+    
+    .empty {
+      text-align: center;
+      padding: 40px;
+      color: #444;
+    }
+    
+    .loader {
+      display: none;
+      text-align: center;
+      padding: 30px;
+      color: #c44569;
+    }
+    
+    .loader.active { display: block; }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .spinner {
+      width: 30px;
+      height: 30px;
+      border: 3px solid rgba(196, 69, 105, 0.2);
+      border-top-color: #ff6b9d;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="glow-dot dot-1"></div>
+  <div class="glow-dot dot-2"></div>
+  <div class="glow-dot dot-3"></div>
+  
+  <div class="container">
+    <div class="header">
+      <h1>QIYANAS P2P</h1>
+      <p>~ Lolzteam Market Exchange ~</p>
+    </div>
+    
+    <div class="panel">
+      <div class="panel-title">🔻 Фильтры</div>
+      
+      <div class="format-hint">
+        Формат темы: <span>[ОТДАЮ RUB > ПОЛУЧАЮ RUB]</span> Метод > Метод
+      </div>
+      
+      <div class="filters-grid">
+        <div class="filter-section">
+          <h3>Основные</h3>
+          <div class="filter-group">
+            <label>Направление</label>
+            <select id="direction">
+              <option value="">✦ Любое</option>
+              <option value="deposit">Пополнение</option>
+              <option value="withdraw">Вывод</option>
+            </select>
+          </div>
+          <div class="filter-group">
+            <label>Банк / Метод</label>
+            <select id="bank"><option value="">✦ Любой</option></select>
+          </div>
+        </div>
+        
+        <div class="filter-section">
+          <h3>Сумма отдачи (первое число)</h3>
+          <div class="filter-group">
+            <label>Минимум отдаю</label>
+            <input type="number" id="minGive" placeholder="0">
+          </div>
+          <div class="filter-group">
+            <label>Максимум отдаю</label>
+            <input type="number" id="maxGive" placeholder="∞">
+          </div>
+        </div>
+        
+        <div class="filter-section">
+          <h3>Сумма получения (второе число)</h3>
+          <div class="filter-group">
+            <label>Минимум получаю</label>
+            <input type="number" id="minGet" placeholder="0">
+          </div>
+          <div class="filter-group">
+            <label>Максимум получаю</label>
+            <input type="number" id="maxGet" placeholder="∞">
+          </div>
+        </div>
+      </div>
+      
+      <div class="buttons">
+        <button class="btn btn-primary" id="parseBtn">⚙ Начать</button>
+        <button class="btn btn-secondary" id="resetBtn">↻ Сброс</button>
+        <button class="btn btn-auto" id="autoBtn">◷ Авто (5 мин)</button>
+      </div>
+    </div>
+    
+    <div class="stats">
+      <div class="stat-card">
+        <div class="stat-number" id="totalCount">0</div>
+        <div class="stat-label">Найдено</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="depositCount">0</div>
+        <div class="stat-label">Пополнение</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="withdrawCount">0</div>
+        <div class="stat-label">Вывод</div>
+      </div>
+    </div>
+    
+    <div class="panel results-panel">
+      <div class="results-header">
+        <div class="panel-title" style="margin: 0;">📋 Результаты</div>
+      </div>
+      <div class="loader" id="loader">
+        <div class="spinner"></div>
+        Загрузка данных...
+      </div>
+      <div id="threads"><div class="empty">Нажмите "Начать" для поиска</div></div>
+    </div>
+  </div>
+
+  <script>
+    const $ = id => document.getElementById(id);
+    let autoInterval = null;
+
+    async function loadBanks() {
+      try {
+        const res = await fetch('/api/banks');
+        const { grouped } = await res.json();
+        const select = $('bank');
+        for (const [country, banks] of Object.entries(grouped)) {
+          const group = document.createElement('optgroup');
+          group.label = country;
+          banks.forEach(b => {
+            const opt = document.createElement('option');
+            opt.value = b;
+            opt.textContent = b;
+            group.appendChild(opt);
+          });
+          select.appendChild(group);
+        }
+      } catch (e) {
+        console.error('Failed to load banks:', e);
+      }
+    }
+
+    function getType(parsed) {
+      if (parsed?.toMethod?.toLowerCase().includes('маркет')) return 'deposit';
+      if (parsed?.fromMethod?.toLowerCase().includes('маркет')) return 'withdraw';
+      return 'other';
+    }
+
+    function renderThreads(threads) {
+      const container = $('threads');
+      if (!threads.length) {
+        container.innerHTML = '<div class="empty">Ничего не найдено по заданным фильтрам</div>';
+        return;
+      }
+      
+      container.innerHTML = threads.map(t => {
+        const type = getType(t.parsed);
+        const tagClass = type === 'deposit' ? 'tag-deposit' : type === 'withdraw' ? 'tag-withdraw' : 'tag-other';
+        const tagText = type === 'deposit' ? 'DEPOSIT' : type === 'withdraw' ? 'WITHDRAW' : 'OTHER';
+        const date = new Date(t.thread_create_date * 1000).toLocaleString('ru-RU');
+        return `<div class="thread">
+          <div class="thread-title"><span class="tag ${tagClass}">${tagText}</span>${t.thread_title}</div>
+          <div class="thread-meta">
+            <span>👤 ${t.creator_username}</span>
+            <span>📅 ${date}</span>
+            <a href="https://lolz.live/threads/${t.thread_id}/" target="_blank">🔗 Открыть тему</a>
+          </div>
+        </div>`;
+      }).join('');
+    }
+
+    function updateStats(threads) {
+      let deposits = 0, withdraws = 0;
+      threads.forEach(t => {
+        const type = getType(t.parsed);
+        if (type === 'deposit') deposits++;
+        else if (type === 'withdraw') withdraws++;
+      });
+      $('totalCount').textContent = threads.length;
+      $('depositCount').textContent = deposits;
+      $('withdrawCount').textContent = withdraws;
+    }
+
+    async function parse() {
+      const btn = $('parseBtn');
+      const loader = $('loader');
+      btn.disabled = true;
+      loader.classList.add('active');
+      $('threads').innerHTML = '';
+
+      const filters = {
+        direction: $('direction').value || undefined,
+        bank: $('bank').value || undefined,
+        minGive: +$('minGive').value || undefined,
+        maxGive: +$('maxGive').value || undefined,
+        minGet: +$('minGet').value || undefined,
+        maxGet: +$('maxGet').value || undefined
+      };
+
+      try {
+        const res = await fetch('/api/parse', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ pages: 50, filters })
+        });
+        const data = await res.json();
+        updateStats(data.threads || []);
+        renderThreads(data.threads || []);
+      } catch (e) {
+        $('threads').innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
+        updateStats([]);
+      }
+
+      btn.disabled = false;
+      loader.classList.remove('active');
+    }
+
+    function resetFilters() {
+      $('direction').value = '';
+      $('bank').value = '';
+      $('minGive').value = '';
+      $('maxGive').value = '';
+      $('minGet').value = '';
+      $('maxGet').value = '';
+      $('threads').innerHTML = '<div class="empty">Нажмите "Начать" для поиска</div>';
+      updateStats([]);
+    }
+
+    function toggleAuto() {
+      const btn = $('autoBtn');
+      if (autoInterval) {
+        clearInterval(autoInterval);
+        autoInterval = null;
+        btn.classList.remove('active');
+        btn.innerHTML = '◷ Авто (5 мин)';
+      } else {
+        parse();
+        autoInterval = setInterval(parse, 5 * 60 * 1000);
+        btn.classList.add('active');
+        btn.innerHTML = '◼ Остановить';
+      }
+    }
+
+    $('parseBtn').addEventListener('click', parse);
+    $('resetBtn').addEventListener('click', resetFilters);
+    $('autoBtn').addEventListener('click', toggleAuto);
+    loadBanks();
+  </script>
+</body>
+</html>
