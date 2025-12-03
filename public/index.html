@@ -4,132 +4,224 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>QIYANAS P2P</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Inter:wght@400;500;600&display=swap');
-    
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --primary: #ff6b9d;
+      --primary-dark: #c44569;
+      --bg-dark: #0a0a0f;
+      --bg-card: rgba(20, 15, 25, 0.95);
+      --border: rgba(196, 69, 105, 0.3);
+      --text: #e0e0e0;
+      --text-muted: #888;
+      --success: #10b981;
+      --warning: #f59e0b;
+    }
     
     body {
       font-family: 'Inter', sans-serif;
-      background: #0a0a0f;
-      color: #e0e0e0;
+      background: var(--bg-dark);
+      color: var(--text);
       min-height: 100vh;
-      position: relative;
       overflow-x: hidden;
     }
     
     body::before {
       content: '';
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      inset: 0;
       background: 
         radial-gradient(ellipse at 20% 20%, rgba(139, 69, 139, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 80%, rgba(139, 69, 139, 0.1) 0%, transparent 50%),
-        radial-gradient(ellipse at 50% 50%, rgba(75, 0, 75, 0.1) 0%, transparent 70%);
+        radial-gradient(ellipse at 80% 80%, rgba(139, 69, 139, 0.1) 0%, transparent 50%);
       pointer-events: none;
-      z-index: 0;
     }
-    
-    .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; position: relative; z-index: 1; }
-    
+
     .header {
-      text-align: center;
-      margin-bottom: 40px;
+      background: linear-gradient(180deg, rgba(20, 15, 25, 0.98) 0%, transparent 100%);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 24px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(20px);
     }
     
-    .header h1 {
+    .header-content {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .logo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    
+    .logo {
       font-family: 'Orbitron', monospace;
-      font-size: 48px;
+      font-size: 28px;
       font-weight: 900;
-      background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #ff6b9d 100%);
+      background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      letter-spacing: 8px;
       text-shadow: 0 0 40px rgba(255, 107, 157, 0.5);
-      margin-bottom: 8px;
+      letter-spacing: 4px;
     }
     
-    .header p {
+    .logo-subtitle {
       font-family: 'Orbitron', monospace;
-      color: #c44569;
-      font-size: 14px;
-      letter-spacing: 3px;
+      font-size: 10px;
+      color: var(--primary-dark);
+      font-style: italic;
+      letter-spacing: 2px;
       opacity: 0.8;
     }
     
-    .glow-dot {
-      width: 8px;
-      height: 8px;
-      background: #ff6b9d;
-      border-radius: 50%;
-      position: absolute;
-      box-shadow: 0 0 20px #ff6b9d, 0 0 40px #ff6b9d;
-      animation: pulse 2s ease-in-out infinite;
+    .nav-menu {
+      display: flex;
+      gap: 8px;
     }
     
-    .dot-1 { top: 50px; right: 50px; }
-    .dot-2 { top: 200px; left: 30px; animation-delay: 0.5s; }
-    .dot-3 { bottom: 300px; right: 80px; animation-delay: 1s; }
+    .nav-item {
+      padding: 10px 20px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.3s;
+      cursor: pointer;
+    }
     
-    @keyframes pulse {
-      0%, 100% { opacity: 0.5; transform: scale(1); }
-      50% { opacity: 1; transform: scale(1.2); }
+    .nav-item:hover, .nav-item.active {
+      color: var(--primary);
+      background: rgba(196, 69, 105, 0.1);
+    }
+
+    .user-balance {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      padding: 10px 20px;
+      border-radius: 12px;
+    }
+    
+    .balance-icon {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+    
+    .balance-info {
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .balance-label {
+      font-size: 10px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    
+    .balance-amount {
+      font-family: 'Orbitron', monospace;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    
+    .main-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 24px;
+      position: relative;
+      z-index: 1;
     }
     
     .panel {
-      background: linear-gradient(135deg, rgba(20, 15, 25, 0.95) 0%, rgba(15, 10, 20, 0.98) 100%);
-      border: 1px solid rgba(196, 69, 105, 0.3);
+      background: var(--bg-card);
+      border: 1px solid var(--border);
       border-radius: 16px;
       padding: 24px;
-      margin-bottom: 20px;
+      margin-bottom: 24px;
       position: relative;
-      backdrop-filter: blur(10px);
     }
     
     .panel::before {
       content: '';
       position: absolute;
-      top: -1px; left: -1px; right: -1px; bottom: -1px;
-      background: linear-gradient(135deg, rgba(255, 107, 157, 0.2), transparent, rgba(196, 69, 105, 0.2));
+      inset: -1px;
+      background: linear-gradient(135deg, rgba(255, 107, 157, 0.15), transparent, rgba(196, 69, 105, 0.15));
       border-radius: 16px;
       z-index: -1;
       opacity: 0.5;
     }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
     
     .panel-title {
-      color: #c44569;
-      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 16px;
       font-weight: 600;
-      margin-bottom: 20px;
+      color: var(--text);
+    }
+    
+    .panel-title-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+    
+    .filters-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 24px;
+    }
+    
+    .filter-block {
+      background: rgba(15, 10, 20, 0.5);
+      border: 1px solid rgba(196, 69, 105, 0.15);
+      border-radius: 12px;
+      padding: 20px;
+    }
+    
+    .filter-block-title {
       display: flex;
       align-items: center;
       gap: 8px;
-    }
-    
-    .format-hint {
-      background: rgba(196, 69, 105, 0.1);
-      border: 1px solid rgba(196, 69, 105, 0.3);
-      border-radius: 8px;
-      padding: 10px 16px;
       font-size: 12px;
-      color: #888;
-      margin-bottom: 24px;
-      font-family: monospace;
-    }
-    
-    .format-hint span { color: #ff6b9d; }
-    
-    .filters-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 24px;
-      margin-bottom: 24px;
-    }
-    
-    .filter-section h3 {
-      color: #666;
-      font-size: 11px;
+      font-weight: 600;
+      color: var(--primary);
       text-transform: uppercase;
       letter-spacing: 1px;
       margin-bottom: 16px;
@@ -139,62 +231,144 @@
       margin-bottom: 16px;
     }
     
-    .filter-group label {
-      display: block;
-      color: #c44569;
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-      margin-bottom: 8px;
+    .filter-group:last-child {
+      margin-bottom: 0;
     }
     
-    select, input[type="number"] {
+    .filter-label {
+      display: block;
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+    }
+
+    .filter-hint {
+      font-size: 10px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      opacity: 0.7;
+    }
+    
+    select, input[type="number"], input[type="text"] {
       width: 100%;
-      background: rgba(20, 15, 25, 0.8);
-      border: 1px solid rgba(196, 69, 105, 0.3);
-      color: #fff;
+      background: rgba(10, 10, 15, 0.8);
+      border: 1px solid var(--border);
+      color: var(--text);
       padding: 12px 16px;
-      border-radius: 8px;
+      border-radius: 10px;
       font-size: 14px;
       font-family: 'Inter', sans-serif;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
     }
     
     select:focus, input:focus {
       outline: none;
-      border-color: #ff6b9d;
-      box-shadow: 0 0 20px rgba(255, 107, 157, 0.2);
+      border-color: var(--primary);
+      box-shadow: 0 0 20px rgba(255, 107, 157, 0.15);
     }
     
-    select { cursor: pointer; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c44569' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
+    select {
+      cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c44569' d='M6 8L1 3h10z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 40px;
+    }
     
-    input::placeholder { color: #444; }
+    input::placeholder {
+      color: #444;
+    }
     
-    .buttons {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 16px;
+    .currency-select-wrapper {
+      position: relative;
+    }
+    
+    .currency-icon {
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 18px;
+      pointer-events: none;
+    }
+    
+    .currency-select-wrapper select {
+      padding-left: 40px;
+    }
+    
+    .toggle-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 12px;
+    }
+    
+    .toggle {
+      position: relative;
+      width: 44px;
+      height: 24px;
+      background: rgba(100, 100, 100, 0.3);
+      border-radius: 12px;
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+
+    .toggle.active {
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+    }
+    
+    .toggle::after {
+      content: '';
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      background: white;
+      border-radius: 50%;
+      top: 3px;
+      left: 3px;
+      transition: all 0.3s;
+    }
+    
+    .toggle.active::after {
+      left: 23px;
+    }
+    
+    .toggle-label {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+    
+
+    
+    .buttons-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
     }
     
     .btn {
-      padding: 14px 24px;
-      border-radius: 8px;
+      padding: 14px 28px;
+      border-radius: 10px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all 0.3s;
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       font-family: 'Inter', sans-serif;
-    }
-    
-    .btn-primary {
-      background: linear-gradient(135deg, #c44569 0%, #ff6b9d 100%);
       border: none;
-      color: #fff;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary) 100%);
+      color: white;
       box-shadow: 0 4px 20px rgba(196, 69, 105, 0.4);
+      flex: 1;
     }
     
     .btn-primary:hover {
@@ -210,265 +384,542 @@
     
     .btn-secondary {
       background: transparent;
-      border: 1px solid rgba(196, 69, 105, 0.5);
-      color: #c44569;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
     }
     
     .btn-secondary:hover {
       background: rgba(196, 69, 105, 0.1);
-      border-color: #ff6b9d;
+      border-color: var(--primary);
+      color: var(--primary);
     }
     
     .btn-auto {
       background: transparent;
-      border: 1px solid rgba(196, 69, 105, 0.5);
-      color: #c44569;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
     }
     
     .btn-auto.active {
-      background: rgba(196, 69, 105, 0.2);
-      border-color: #ff6b9d;
-      color: #ff6b9d;
+      background: rgba(16, 185, 129, 0.15);
+      border-color: var(--success);
+      color: var(--success);
     }
     
-    .stats {
+    .stats-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
+      margin-bottom: 24px;
     }
     
     .stat-card {
-      background: linear-gradient(135deg, rgba(20, 15, 25, 0.95) 0%, rgba(15, 10, 20, 0.98) 100%);
-      border: 1px solid rgba(196, 69, 105, 0.3);
-      border-radius: 12px;
-      padding: 24px;
-      text-align: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 20px;
       position: relative;
+      overflow: hidden;
     }
     
-    .stat-card::after {
+    .stat-card::before {
       content: '';
       position: absolute;
-      width: 6px;
-      height: 6px;
-      background: #ff6b9d;
-      border-radius: 50%;
-      top: 12px;
-      right: 12px;
-      box-shadow: 0 0 10px #ff6b9d;
-      animation: pulse 2s ease-in-out infinite;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+    }
+
+    .stat-card.success::before {
+      background: linear-gradient(90deg, var(--success), #059669);
     }
     
-    .stat-card:nth-child(2)::after { animation-delay: 0.3s; }
-    .stat-card:nth-child(3)::after { animation-delay: 0.6s; }
+    .stat-card.warning::before {
+      background: linear-gradient(90deg, var(--warning), #d97706);
+    }
+    
+    .stat-icon {
+      width: 40px;
+      height: 40px;
+      background: rgba(196, 69, 105, 0.15);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 12px;
+    }
+    
+    .stat-card.success .stat-icon {
+      background: rgba(16, 185, 129, 0.15);
+    }
+    
+    .stat-card.warning .stat-icon {
+      background: rgba(245, 158, 11, 0.15);
+    }
     
     .stat-number {
       font-family: 'Orbitron', monospace;
-      font-size: 42px;
+      font-size: 32px;
       font-weight: 700;
-      background: linear-gradient(135deg, #ff6b9d, #c44569);
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      background-clip: text;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
+    }
+    
+    .stat-card.success .stat-number {
+      background: linear-gradient(135deg, var(--success), #059669);
+      -webkit-background-clip: text;
+    }
+    
+    .stat-card.warning .stat-number {
+      background: linear-gradient(135deg, var(--warning), #d97706);
+      -webkit-background-clip: text;
     }
     
     .stat-label {
-      color: #666;
       font-size: 12px;
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 1px;
+      letter-spacing: 0.5px;
     }
-    
-    .results-panel { margin-top: 20px; }
     
     .results-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
-      padding-bottom: 16px;
-      border-bottom: 1px solid rgba(196, 69, 105, 0.2);
     }
     
-    .thread {
-      padding: 16px;
+
+
+    .threads-list {
+      margin-top: 16px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    
+    .threads-list:has(.empty-state) {
+      display: flex;
+      justify-content: center;
+    }
+    
+    .thread-card {
+      background: rgba(15, 10, 20, 0.6);
       border: 1px solid rgba(196, 69, 105, 0.2);
-      border-radius: 10px;
-      margin-bottom: 12px;
-      transition: all 0.3s ease;
-      background: rgba(15, 10, 20, 0.5);
+      border-radius: 12px;
+      padding: 16px;
+      transition: all 0.3s;
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      gap: 14px;
+      align-items: center;
     }
     
-    .thread:hover {
-      border-color: rgba(255, 107, 157, 0.4);
-      background: rgba(196, 69, 105, 0.05);
+    .thread-card:hover {
+      border-color: var(--primary);
+      background: rgba(196, 69, 105, 0.08);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(196, 69, 105, 0.15);
+    }
+    
+    .thread-type {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+      min-width: 60px;
+    }
+    
+    .thread-type-label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+    
+    .thread-type-label.from {
+      color: var(--warning);
+    }
+    
+    .thread-type-label.to {
+      color: var(--success);
+    }
+    
+    .thread-type-badge {
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin: 4px 0;
+    }
+    
+    .badge-deposit {
+      background: rgba(16, 185, 129, 0.2);
+      color: var(--success);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+    }
+    
+    .badge-withdraw {
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--warning);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+    
+    .badge-other {
+      background: rgba(107, 114, 128, 0.2);
+      color: #9ca3af;
+      border: 1px solid rgba(107, 114, 128, 0.3);
+    }
+    
+    .thread-id {
+      font-size: 9px;
+      color: var(--text-muted);
+      font-family: monospace;
+      opacity: 0.7;
+    }
+    
+    .thread-content {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
     
     .thread-title {
-      font-weight: 500;
-      margin-bottom: 10px;
-      word-break: break-word;
-      line-height: 1.4;
+      font-size: 13px;
+      font-weight: 600;
+      line-height: 1.3;
+      color: var(--text);
     }
     
     .thread-meta {
-      font-size: 12px;
-      color: #666;
       display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 12px;
+      color: var(--text-muted);
     }
     
-    .thread-meta a {
-      color: #ff6b9d;
+    .thread-meta-item {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    
+    .thread-meta-item.date {
+      color: var(--primary);
+      font-weight: 500;
+    }
+    
+    .thread-actions {
+      display: flex;
+      align-items: center;
+    }
+    
+    .btn-open {
+      padding: 8px 16px;
+      background: linear-gradient(135deg, var(--primary-dark), var(--primary));
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s;
       text-decoration: none;
-      transition: color 0.2s;
-    }
-    
-    .thread-meta a:hover { color: #fff; }
-    
-    .tag {
-      display: inline-block;
-      padding: 3px 10px;
-      border-radius: 4px;
-      font-size: 10px;
-      font-weight: 700;
-      margin-right: 10px;
-      letter-spacing: 1px;
-    }
-    
-    .tag-deposit { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.3); }
-    .tag-withdraw { background: rgba(245, 158, 11, 0.2); color: #f59e0b; border: 1px solid rgba(245, 158, 11, 0.3); }
-    .tag-other { background: rgba(107, 114, 128, 0.2); color: #6b7280; border: 1px solid rgba(107, 114, 128, 0.3); }
-    
-    .empty {
       text-align: center;
-      padding: 40px;
-      color: #444;
+      white-space: nowrap;
+    }
+    
+    .btn-open:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(196, 69, 105, 0.4);
+    }
+    
+
+    
+    .empty-state {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-muted);
+    }
+    
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+      opacity: 0.5;
+    }
+
+    .empty-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: var(--text);
+    }
+    
+    .empty-hint {
+      font-size: 13px;
+      max-width: 400px;
+      margin: 0 auto;
     }
     
     .loader {
       display: none;
       text-align: center;
-      padding: 30px;
-      color: #c44569;
+      padding: 40px;
     }
     
-    .loader.active { display: block; }
+    .loader.active {
+      display: block;
+    }
+    
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 16px;
+    }
     
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
     
-    .spinner {
-      width: 30px;
-      height: 30px;
-      border: 3px solid rgba(196, 69, 105, 0.2);
-      border-top-color: #ff6b9d;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
-      margin: 0 auto 10px;
+    .loader-text {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    .tooltip {
+      position: relative;
+    }
+    
+    .tooltip::after {
+      content: attr(data-tooltip);
+      position: absolute;
+      bottom: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 8px 12px;
+      background: rgba(0, 0, 0, 0.9);
+      color: white;
+      font-size: 11px;
+      border-radius: 6px;
+      white-space: nowrap;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.2s;
+      margin-bottom: 8px;
+    }
+    
+    .tooltip:hover::after {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    @media (max-width: 1200px) {
+      .filters-section {
+        grid-template-columns: 1fr 1fr;
+      }
+      .stats-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .header-content {
+        flex-direction: column;
+        gap: 16px;
+      }
+      .nav-menu {
+        order: 3;
+      }
+      .filters-section {
+        grid-template-columns: 1fr;
+      }
+      .stats-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .threads-list {
+        grid-template-columns: 1fr;
+      }
+      .thread-card {
+        grid-template-columns: auto 1fr auto;
+      }
     }
   </style>
 </head>
+
 <body>
-  <div class="glow-dot dot-1"></div>
-  <div class="glow-dot dot-2"></div>
-  <div class="glow-dot dot-3"></div>
-  
-  <div class="container">
-    <div class="header">
-      <h1>QIYANAS P2P</h1>
-      <p>~ Lolzteam Market Exchange ~</p>
+  <!-- Header -->
+  <header class="header">
+    <div class="header-content">
+      <div class="logo-section">
+        <div class="logo">QIYANAS P2P</div>
+        <div class="logo-subtitle">~ Lolzteam Market Exchange ~</div>
+      </div>
+      
+
     </div>
-    
+  </header>
+
+  <!-- Main Content -->
+  <main class="main-container">
+    <!-- Filters Panel -->
     <div class="panel">
-      <div class="panel-title">🔻 Фильтры</div>
-      
-      <div class="format-hint">
-        Формат темы: <span>[ОТДАЮ RUB > ПОЛУЧАЮ RUB]</span> Метод > Метод
-      </div>
-      
-      <div class="filters-grid">
-        <div class="filter-section">
-          <h3>Основные</h3>
-          <div class="filter-group">
-            <label>Направление</label>
-            <select id="direction">
-              <option value="">✦ Любое</option>
-              <option value="deposit">Пополнение</option>
-              <option value="withdraw">Вывод</option>
-            </select>
-          </div>
-          <div class="filter-group">
-            <label>Банк / Метод</label>
-            <select id="bank"><option value="">✦ Любой</option></select>
-          </div>
-        </div>
-        
-        <div class="filter-section">
-          <h3>Сумма отдачи (первое число)</h3>
-          <div class="filter-group">
-            <label>Минимум отдаю</label>
-            <input type="number" id="minGive" placeholder="0">
-          </div>
-          <div class="filter-group">
-            <label>Максимум отдаю</label>
-            <input type="number" id="maxGive" placeholder="∞">
-          </div>
-        </div>
-        
-        <div class="filter-section">
-          <h3>Сумма получения (второе число)</h3>
-          <div class="filter-group">
-            <label>Минимум получаю</label>
-            <input type="number" id="minGet" placeholder="0">
-          </div>
-          <div class="filter-group">
-            <label>Максимум получаю</label>
-            <input type="number" id="maxGet" placeholder="∞">
-          </div>
+      <div class="panel-header">
+        <div class="panel-title">
+          <div class="panel-title-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          Фильтры поиска
         </div>
       </div>
       
-      <div class="buttons">
-        <button class="btn btn-primary" id="parseBtn">⚙ Начать</button>
-        <button class="btn btn-secondary" id="resetBtn">↻ Сброс</button>
-        <button class="btn btn-auto" id="autoBtn">◷ Авто (5 мин)</button>
+      <div class="filters-section">
+        <!-- Основные параметры -->
+        <div class="filter-block">
+          <div class="filter-block-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg> Основные параметры
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Направление обмена</label>
+            <div class="currency-select-wrapper">
+              <span class="currency-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></svg></span>
+              <select id="direction">
+                <option value="">Любое направление</option>
+                <option value="deposit">↓ Пополнение (RUB → Маркет)</option>
+                <option value="withdraw">↑ Вывод (Маркет → RUB)</option>
+              </select>
+            </div>
+            <div class="filter-hint">Выберите тип операции</div>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Банк / Метод оплаты</label>
+            <div class="currency-select-wrapper">
+              <span class="currency-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 21h18"/><path d="M3 10h18"/><path d="M5 6l7-3 7 3"/><path d="M4 10v11"/><path d="M20 10v11"/><path d="M8 14v3"/><path d="M12 14v3"/><path d="M16 14v3"/></svg></span>
+              <select id="bank">
+                <option value="">Любой метод</option>
+              </select>
+            </div>
+            <div class="filter-hint">СБП, Карта, TON Wallet и др.</div>
+          </div>
+        </div>
+
+        <!-- Сумма отдачи -->
+        <div class="filter-block">
+          <div class="filter-block-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg> Я хочу отдать
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Минимальная сумма</label>
+            <input type="number" id="minGive" placeholder="От 0 RUB">
+            <div class="filter-hint">Введите минимум, который готовы отдать</div>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Максимальная сумма</label>
+            <input type="number" id="maxGive" placeholder="До ∞ RUB">
+            <div class="filter-hint">Введите максимум, который готовы отдать</div>
+          </div>
+          
+
+        </div>
+        
+        <!-- Сумма получения -->
+        <div class="filter-block">
+          <div class="filter-block-title">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg> Я хочу получить
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Минимальная сумма</label>
+            <input type="number" id="minGet" placeholder="От 0 RUB">
+            <div class="filter-hint">Сумма после комиссии</div>
+          </div>
+          
+          <div class="filter-group">
+            <label class="filter-label">Максимальная сумма</label>
+            <input type="number" id="maxGet" placeholder="До ∞ RUB">
+            <div class="filter-hint">Сумма после комиссии</div>
+          </div>
+        </div>
+      </div>
+      
+
+      
+      <!-- Action Buttons -->
+      <div class="buttons-row">
+        <button class="btn btn-primary" id="parseBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg> Найти предложения
+        </button>
+        <button class="btn btn-secondary" id="resetBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg> Сбросить
+        </button>
+        <button class="btn btn-auto" id="autoBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Авто-обновление
+        </button>
       </div>
     </div>
     
-    <div class="stats">
+    <!-- Stats Grid -->
+    <div class="stats-grid">
       <div class="stat-card">
+        <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
         <div class="stat-number" id="totalCount">0</div>
-        <div class="stat-label">Найдено</div>
+        <div class="stat-label">Всего найдено</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card success">
+        <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg></div>
         <div class="stat-number" id="depositCount">0</div>
         <div class="stat-label">Пополнение</div>
       </div>
-      <div class="stat-card">
+      <div class="stat-card warning">
+        <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--warning)" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>
         <div class="stat-number" id="withdrawCount">0</div>
         <div class="stat-label">Вывод</div>
       </div>
-    </div>
-    
-    <div class="panel results-panel">
-      <div class="results-header">
-        <div class="panel-title" style="margin: 0;">📋 Результаты</div>
+      <div class="stat-card">
+        <div class="stat-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>
+        <div class="stat-number" id="lastUpdate">--:--</div>
+        <div class="stat-label">Обновлено</div>
       </div>
+    </div>
+
+    <!-- Results Panel -->
+    <div class="panel">
+      <div class="panel-header results-header">
+        <div class="panel-title">
+          <div class="panel-title-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></div>
+          Результаты поиска
+        </div>
+
+      </div>
+      
       <div class="loader" id="loader">
         <div class="spinner"></div>
-        Загрузка данных...
+        <div class="loader-text">Загрузка предложений...</div>
       </div>
-      <div id="threads"><div class="empty">Нажмите "Начать" для поиска</div></div>
+      
+      <div class="threads-list" id="threads">
+        <div class="empty-state">
+          <div class="empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="empty-title">Начните поиск</div>
+          <div class="empty-hint">Настройте фильтры и нажмите "Найти предложения" для поиска выгодных сделок</div>
+        </div>
+      </div>
     </div>
-  </div>
+  </main>
 
   <script>
     const $ = id => document.getElementById(id);
     let autoInterval = null;
+    let autoCalcEnabled = false;
 
     async function loadBanks() {
       try {
@@ -500,23 +951,47 @@
     function renderThreads(threads) {
       const container = $('threads');
       if (!threads.length) {
-        container.innerHTML = '<div class="empty">Ничего не найдено по заданным фильтрам</div>';
+        container.innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M16 16s-1.5-2-4-2-4 2-4 2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg></div>
+            <div class="empty-title">Ничего не найдено</div>
+            <div class="empty-hint">Попробуйте изменить параметры фильтров или расширить диапазон сумм</div>
+          </div>`;
         return;
       }
       
       container.innerHTML = threads.map(t => {
         const type = getType(t.parsed);
-        const tagClass = type === 'deposit' ? 'tag-deposit' : type === 'withdraw' ? 'tag-withdraw' : 'tag-other';
-        const tagText = type === 'deposit' ? 'DEPOSIT' : type === 'withdraw' ? 'WITHDRAW' : 'OTHER';
+        const badgeClass = type === 'deposit' ? 'badge-deposit' : type === 'withdraw' ? 'badge-withdraw' : 'badge-other';
+        const badgeText = type === 'deposit' ? 'ВЫВОД' : type === 'withdraw' ? 'ВЫВОД' : 'ДРУГОЕ';
         const date = new Date(t.thread_create_date * 1000).toLocaleString('ru-RU');
-        return `<div class="thread">
-          <div class="thread-title"><span class="tag ${tagClass}">${tagText}</span>${t.thread_title}</div>
-          <div class="thread-meta">
-            <span>👤 ${t.creator_username}</span>
-            <span>📅 ${date}</span>
-            <a href="https://lolz.live/threads/${t.thread_id}/" target="_blank">🔗 Открыть тему</a>
-          </div>
-        </div>`;
+        
+        const giveAmount = t.parsed?.giveAmount || '—';
+        const getAmount = t.parsed?.getAmount || '—';
+        const fromMethod = t.parsed?.fromMethod || 'Маркет';
+        const toMethod = t.parsed?.toMethod || 'СБП';
+        
+        return `
+          <div class="thread-card">
+            <div class="thread-type">
+              <span class="thread-type-label from">${fromMethod}</span>
+              <span class="thread-type-badge ${badgeClass}">${badgeText}</span>
+              <span class="thread-type-label to">${toMethod}</span>
+              <span class="thread-id">#${t.thread_id}</span>
+            </div>
+            
+            <div class="thread-content">
+              <div class="thread-title">[${giveAmount} > ${getAmount}] ${fromMethod} > ${toMethod}</div>
+              <div class="thread-meta">
+                <span class="thread-meta-item"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg> ${t.creator_username}</span>
+                <span class="thread-meta-item date"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg> ${date}</span>
+              </div>
+            </div>
+            
+            <div class="thread-actions">
+              <a href="https://lolz.live/threads/${t.thread_id}/" target="_blank" class="btn-open">Перейти →</a>
+            </div>
+          </div>`;
       }).join('');
     }
 
@@ -530,6 +1005,7 @@
       $('totalCount').textContent = threads.length;
       $('depositCount').textContent = deposits;
       $('withdrawCount').textContent = withdraws;
+      $('lastUpdate').textContent = new Date().toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' });
     }
 
     async function parse() {
@@ -558,7 +1034,12 @@
         updateStats(data.threads || []);
         renderThreads(data.threads || []);
       } catch (e) {
-        $('threads').innerHTML = `<div class="empty">Ошибка: ${e.message}</div>`;
+        $('threads').innerHTML = `
+          <div class="empty-state">
+            <div class="empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div>
+            <div class="empty-title">Ошибка загрузки</div>
+            <div class="empty-hint">${e.message}</div>
+          </div>`;
         updateStats([]);
       }
 
@@ -573,7 +1054,13 @@
       $('maxGive').value = '';
       $('minGet').value = '';
       $('maxGet').value = '';
-      $('threads').innerHTML = '<div class="empty">Нажмите "Начать" для поиска</div>';
+
+      $('threads').innerHTML = `
+        <div class="empty-state">
+          <div class="empty-icon"><svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="1.5"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+          <div class="empty-title">Начните поиск</div>
+          <div class="empty-hint">Настройте фильтры и нажмите "Найти предложения" для поиска выгодных сделок</div>
+        </div>`;
       updateStats([]);
     }
 
@@ -583,18 +1070,19 @@
         clearInterval(autoInterval);
         autoInterval = null;
         btn.classList.remove('active');
-        btn.innerHTML = '◷ Авто (5 мин)';
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Авто-обновление';
       } else {
         parse();
         autoInterval = setInterval(parse, 5 * 60 * 1000);
         btn.classList.add('active');
-        btn.innerHTML = '◼ Остановить';
+        btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg> Остановить (5 мин)';
       }
     }
 
     $('parseBtn').addEventListener('click', parse);
     $('resetBtn').addEventListener('click', resetFilters);
     $('autoBtn').addEventListener('click', toggleAuto);
+
     loadBanks();
   </script>
 </body>
